@@ -35,6 +35,8 @@ namespace TaskManagementSystem.Controllers
             {
                 return BadRequest("Due date is incorrect");
             }
+
+            //GetUser
             string? userName = User.GetUsername();
             if (userName is null)
             {
@@ -68,6 +70,8 @@ namespace TaskManagementSystem.Controllers
             {
                 return BadRequest("Due date is incorrect");
             }
+
+            //GetUser
             var userName = User.GetUsername();
             if (userName is null)
             {
@@ -79,9 +83,11 @@ namespace TaskManagementSystem.Controllers
                 return NotFound("User wasn`t found");
             }
 
+            //GetTaskById
             var task = await _taskRepository.GetEntityById(taskId);
             if (task is null) return NotFound("Task wasn`t found");
 
+            //Checking if this is user`s task
             if (appUser.Id != task.UserId)
             {
                 return BadRequest("You can`t update this task");
@@ -89,8 +95,7 @@ namespace TaskManagementSystem.Controllers
 
             var taskUpdated = updateTaskDto.ToUpdateTask(task.TaskId, appUser.Id);
 
-
-
+            //Updating
             var result = await _taskRepository.UpdateTask(taskId, taskUpdated);
 
             if (result is null) return BadRequest("Something went wrong during updating");
@@ -103,6 +108,7 @@ namespace TaskManagementSystem.Controllers
         [Authorize]
         public async Task<IActionResult> DeleteTask(Guid taskId)
         {
+            //GetUser
             var userName = User.GetUsername();
             if (userName is null)
             {
@@ -117,6 +123,7 @@ namespace TaskManagementSystem.Controllers
             var task = await _taskRepository.GetEntityById(taskId);
             if (task is null) return NotFound("Task wasn`t found");
 
+            //Checking if this is user`s task
             if (appUser.Id != task.UserId)
             {
                 return BadRequest("You can`t delete this task");
@@ -138,6 +145,7 @@ namespace TaskManagementSystem.Controllers
         [Authorize]
         public async Task<IActionResult> GetTasks([FromQuery] TaskFilterDto filter, [FromQuery] int pageNumber = 1, [FromQuery] int pageSize = 10)
         {
+            //GetUser
             var userName = User.GetUsername();
             if (userName is null)
             {
@@ -148,6 +156,8 @@ namespace TaskManagementSystem.Controllers
             {
                 return NotFound("User wasn`t found");
             }
+            
+            //Get tasks with filtering
             var result = await _taskRepository.GetTasks(filter, pageNumber, pageSize, appUser.Id);
 
             return Ok(result.ToTaskResultDtoList());
@@ -157,6 +167,7 @@ namespace TaskManagementSystem.Controllers
         [Authorize]
         public async Task<IActionResult> GetTaskById(Guid taskId)
         {
+            //GetUser
             var userName = User.GetUsername();
             if (userName is null)
             {
@@ -173,7 +184,7 @@ namespace TaskManagementSystem.Controllers
 
             if (appUser.Id != task.UserId)
             {
-                return BadRequest("You can`t delete this task");
+                return BadRequest("You can`t get this task");
             }
 
             return Ok(task.ToTaskResultDto());

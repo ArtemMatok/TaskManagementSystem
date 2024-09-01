@@ -46,7 +46,7 @@ namespace TaskManagementSystem.Test.Controller
 
             var controller = new TaskController(_taskRepository, _userManager)
             {
-                // Імітуємо аутентифікованого користувача
+                
                 ControllerContext = new ControllerContext
                 {
                     HttpContext = new DefaultHttpContext
