@@ -2,6 +2,7 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using TaskManagementSystem.Interfaces.IAuthToken;
 using TaskManagementSystem.Models;
 
 namespace TaskManagementSystem.Services.AuthToken
@@ -16,7 +17,7 @@ namespace TaskManagementSystem.Services.AuthToken
             _config = config;
             _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["JWT:SigningKey"]));
         }
-        public string CreateToken(User user)
+        public string CreateToken(AppUser user)
         {
             var claims = new List<Claim>
             {

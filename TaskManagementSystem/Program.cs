@@ -4,7 +4,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using TaskManagementSystem.Data;
+using TaskManagementSystem.Interfaces.IAuthToken;
+using TaskManagementSystem.Interfaces.ITaskRepo;
 using TaskManagementSystem.Models;
+using TaskManagementSystem.Repositories.TaskRepo;
 using TaskManagementSystem.Services.AuthToken;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,7 +23,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
-builder.Services.AddIdentity<User, IdentityRole>(options =>
+builder.Services.AddIdentity<AppUser, IdentityRole>(options =>
 {
     options.Password.RequireDigit = true;
     options.Password.RequireLowercase = true;
@@ -55,6 +58,7 @@ builder.Services.AddAuthentication(options =>
 });
 
 builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<ITaskRepository, TaskRepository>();
 
 builder.Services.AddSwaggerGen(option =>
 {

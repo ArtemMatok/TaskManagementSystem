@@ -4,8 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TaskManagementSystem.Data;
 using TaskManagementSystem.DTOs.UserDTOs;
+using TaskManagementSystem.Interfaces.IAuthToken;
 using TaskManagementSystem.Models;
-using TaskManagementSystem.Services.AuthToken;
 
 namespace TaskManagementSystem.Controllers
 {
@@ -13,11 +13,11 @@ namespace TaskManagementSystem.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly UserManager<User> _userManager;
+        private readonly UserManager<AppUser> _userManager;
         private readonly ApplicationDbContext _context;
         private readonly ITokenService _tokenService;
-        private readonly SignInManager<User> _signingManager;
-        public UserController(UserManager<User> userManager, ApplicationDbContext context, ITokenService tokenService, SignInManager<User> signingManager)
+        private readonly SignInManager<AppUser> _signingManager;
+        public UserController(UserManager<AppUser> userManager, ApplicationDbContext context, ITokenService tokenService, SignInManager<AppUser> signingManager)
         {
             _userManager = userManager;
             _context = context;
@@ -35,7 +35,7 @@ namespace TaskManagementSystem.Controllers
                     return BadRequest(ModelState);
                 }
 
-                var appUser = new User
+                var appUser = new AppUser
                 {
                     UserName = registerDto.UserName,
                     Email = registerDto.Email,

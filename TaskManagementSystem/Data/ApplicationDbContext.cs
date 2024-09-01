@@ -5,13 +5,13 @@ using TaskManagementSystem.Models;
 
 namespace TaskManagementSystem.Data
 {
-    public class ApplicationDbContext:IdentityDbContext<User>
+    public class ApplicationDbContext:IdentityDbContext<AppUser>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options): base(options)
         {
             
         }
-        
+        public DbSet<TaskEntity> Tasks { get; set; }    
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
