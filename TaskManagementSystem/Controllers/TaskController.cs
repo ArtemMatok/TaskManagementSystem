@@ -29,6 +29,10 @@ namespace TaskManagementSystem.Controllers
         [Authorize]
         public async Task<IActionResult> CreateTask([FromForm] TaskDto taskDto)
         {
+            if (taskDto.DueDate < DateTime.Today)
+            {
+                return BadRequest("Due date is incorrect");
+            }
             var userName = User.GetUsername();
             if (userName is null)
             {
@@ -39,6 +43,7 @@ namespace TaskManagementSystem.Controllers
             {
                 return NotFound("User wasn`t found");
             }
+            
 
             var task = taskDto.ToTask(appUser.Id);
 
@@ -50,13 +55,17 @@ namespace TaskManagementSystem.Controllers
             }
 
 
-            return Ok(result);
+            return Ok(result.ToTaskResultDto());
         }
 
         [HttpPut("{taskId}")]
         [Authorize]
-        public async Task<IActionResult> UpdateTask(Guid taskId, TaskDto updateTaskDto)
+        public async Task<IActionResult> UpdateTask(Guid taskId,[FromForm] TaskDto updateTaskDto)
         {
+            if (updateTaskDto.DueDate < DateTime.Today)
+            {
+                return BadRequest("Due date is incorrect");
+            }
             var userName = User.GetUsername();
             if (userName is null)
             {
@@ -85,6 +94,42 @@ namespace TaskManagementSystem.Controllers
             if (result is null) return BadRequest("Something went wrong during updating");
 
             return Ok(result.ToTaskResultDto());
+        }
+
+
+        [HttpDelete("{taskId}")]
+        [Authorize]
+        public async Task<IActionResult> DeleteTask(Guid taskId)
+        {
+            var userName = User.GetUsername();
+            if (userName is null)
+            {
+                return Unauthorized("You need to be authorize");
+            }
+            var appUser = await _userManager.FindByNameAsync(userName);
+            if (appUser is null)
+            {
+                return NotFound("User wasn`t found");
+            }
+
+            var task = await _taskRepository.GetEntityById(taskId);
+            if (task is null) return NotFound("Task wasn`t found");
+
+            if (appUser.Id != task.UserId)
+            {
+                return BadRequest("You can`t delete this task");
+            }
+
+            var result = await _taskRepository.DeleteTask(task);
+
+            if(result)
+            {
+                return Ok("Deleted");
+            }
+            else
+            {
+                return BadRequest("Something went during deleting");
+            }
         }
 
     }

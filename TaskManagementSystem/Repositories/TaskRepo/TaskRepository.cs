@@ -21,9 +21,13 @@ namespace TaskManagementSystem.Repositories.TaskRepo
             return task;
         }
 
-        public Task<bool> DeleteTask(Guid taskId)
+        public async Task<bool> DeleteTask(TaskEntity task)
         {
-            throw new NotImplementedException();
+            
+
+            _context.Tasks.Remove(task);
+            await _context.SaveChangesAsync();
+            return true;
         }
 
         public async Task<TaskEntity?> GetEntityById(Guid taskId)
