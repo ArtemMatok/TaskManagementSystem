@@ -51,5 +51,30 @@ namespace TaskManagementSystem.Mapper.TaskMap
                 UserName = taskEntity.User.UserName
             };
         }
+
+        public static List<TaskResultDto> ToTaskResultDtoList(this List<TaskEntity> tasksEntity)
+        {
+            var tasksResult = new List<TaskResultDto>();
+
+            foreach (var item in tasksEntity)
+            {
+                tasksResult.Add(new TaskResultDto()
+                {
+
+                    TaskId = item.TaskId,
+                    Title = item.Title,
+                    Description = item.Description,
+                    DueDate = item.DueDate,
+                    Status = item.Status,
+                    Priority = item.Priority,
+                    CreatedAt = item.CreatedAt,
+                    UpdatedAt = item.UpdatedAt,
+                    UserId = item.UserId,
+                    UserName = item.User.UserName
+                });
+            }
+
+            return tasksResult;
+        }
     }
 }
