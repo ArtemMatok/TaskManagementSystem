@@ -35,7 +35,7 @@ namespace TaskManagementSystem.Controllers
             {
                 return BadRequest("Due date is incorrect");
             }
-            var userName = User.GetUsername();
+            string? userName = User.GetUsername();
             if (userName is null)
             {
                 return Unauthorized();

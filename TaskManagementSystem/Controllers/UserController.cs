@@ -14,13 +14,13 @@ namespace TaskManagementSystem.Controllers
     public class UserController : ControllerBase
     {
         private readonly UserManager<AppUser> _userManager;
-        private readonly ApplicationDbContext _context;
+       
         private readonly ITokenService _tokenService;
         private readonly SignInManager<AppUser> _signingManager;
-        public UserController(UserManager<AppUser> userManager, ApplicationDbContext context, ITokenService tokenService, SignInManager<AppUser> signingManager)
+        public UserController(UserManager<AppUser> userManager, ITokenService tokenService, SignInManager<AppUser> signingManager)
         {
             _userManager = userManager;
-            _context = context;
+            
             _tokenService = tokenService;
             _signingManager = signingManager;
         }

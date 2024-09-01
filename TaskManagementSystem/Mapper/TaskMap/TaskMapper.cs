@@ -48,7 +48,7 @@ namespace TaskManagementSystem.Mapper.TaskMap
                 CreatedAt = taskEntity.CreatedAt,
                 UpdatedAt = taskEntity.UpdatedAt,
                 UserId = taskEntity.UserId,
-                UserName = taskEntity.User.UserName
+               
             };
         }
 
@@ -70,7 +70,7 @@ namespace TaskManagementSystem.Mapper.TaskMap
                     CreatedAt = item.CreatedAt,
                     UpdatedAt = item.UpdatedAt,
                     UserId = item.UserId,
-                    UserName = item.User.UserName
+                    
                 });
             }
 
