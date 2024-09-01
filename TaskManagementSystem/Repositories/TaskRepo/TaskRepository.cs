@@ -1,4 +1,5 @@
-﻿using TaskManagementSystem.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using TaskManagementSystem.Data;
 using TaskManagementSystem.Interfaces.ITaskRepo;
 using TaskManagementSystem.Models;
 
@@ -25,9 +26,38 @@ namespace TaskManagementSystem.Repositories.TaskRepo
             throw new NotImplementedException();
         }
 
-        public Task<TaskEntity> UpdateTask(Guid taskId, TaskEntity updateTask)
+        public async Task<TaskEntity?> GetEntityById(Guid taskId)
         {
-            throw new NotImplementedException();
+            var task = await _context.Tasks.FirstOrDefaultAsync(x => x.TaskId == taskId);
+
+            if(task is null)
+            {
+                return null;
+            }
+            return task;
+        }
+
+        public async Task<TaskEntity?> UpdateTask(Guid taskId, TaskEntity updateTask)
+        {
+            var task = await GetEntityById(taskId); 
+
+            if(task is null)
+            {
+                return null;
+            }
+
+            #region Update
+            task.Title = updateTask.Title;  
+            task.Description = updateTask.Description;  
+            task.DueDate = updateTask.DueDate;
+            task.Status = updateTask.Status;
+            task.Priority = updateTask.Priority;
+            task.UpdatedAt = DateTime.Now;
+            #endregion
+
+            _context.Update(task);
+            await _context.SaveChangesAsync();
+            return task;
         }
     }
 }

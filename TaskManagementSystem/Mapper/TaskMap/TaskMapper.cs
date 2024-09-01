@@ -8,7 +8,7 @@ namespace TaskManagementSystem.Mapper.TaskMap
     {
         public static TaskEntity ToTask(this TaskDto taskDto, string userId)
         {
-            var task = new TaskEntity()
+            return new TaskEntity()
             {
                 TaskId = new Guid(),
                 Title = taskDto.Title,
@@ -19,7 +19,37 @@ namespace TaskManagementSystem.Mapper.TaskMap
                 UserId = userId,
             };
 
-            return task;
+        }
+
+        public static TaskEntity ToUpdateTask(this TaskDto taskDto,Guid taskId, string userId)
+        {
+            return new TaskEntity()
+            {
+                TaskId = taskId,
+                Title = taskDto.Title,
+                Description = taskDto.Description,
+                DueDate = taskDto.DueDate,
+                Status = taskDto.Status,
+                Priority = taskDto.Priority,
+                UserId = userId,
+            };
+        }
+
+        public static TaskResultDto ToTaskResultDto(this TaskEntity taskEntity)
+        {
+            return new TaskResultDto()
+            {
+                TaskId = taskEntity.TaskId,
+                Title = taskEntity.Title,
+                Description = taskEntity.Description,
+                DueDate = taskEntity.DueDate,
+                Status = taskEntity.Status,
+                Priority = taskEntity.Priority,
+                CreatedAt = taskEntity.CreatedAt,
+                UpdatedAt = taskEntity.UpdatedAt,
+                UserId = taskEntity.UserId,
+                UserName = taskEntity.User.UserName
+            };
         }
     }
 }
